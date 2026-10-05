@@ -4,7 +4,7 @@ on:
     inputs:
       ref:
         description: Commit, branch or tag to release
-        default: main
+        default: personal
         required: true
 permissions:
   contents: read
