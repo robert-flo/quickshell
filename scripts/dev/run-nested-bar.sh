@@ -16,6 +16,11 @@ fi
 CONFIG_FILE="$REPO_DIR/config/niri-nested.kdl"
 ENTRYPOINT="$REPO_DIR/prototype_bar_shell.qml"
 
+# Sincronizar colores del tema activo de Omarchy hacia Clavis
+if [[ -f "$REPO_DIR/scripts/theme/sync-omarchy-theme.py" ]]; then
+    python3 "$REPO_DIR/scripts/theme/sync-omarchy-theme.py"
+fi
+
 echo "Configuración Niri: $CONFIG_FILE"
 echo "Entrypoint QML:     $ENTRYPOINT"
 echo ""
