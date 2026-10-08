@@ -34,4 +34,12 @@ echo ""
 
 export QML_IMPORT_PATH="$REPO_DIR/build/qml"
 
+# Configurar emulador de key-cli para alimentar métricas del sistema en la barra
+MOCK_KEY="$REPO_DIR/scripts/dev/mock-key-sysmon.py"
+if [[ -f "$MOCK_KEY" ]]; then
+    chmod +x "$MOCK_KEY"
+    export CLAVIS_KEY="$MOCK_KEY"
+    echo "Monitor del sistema: activado con emulador ligero ($MOCK_KEY)"
+fi
+
 exec niri -c "$CONFIG_FILE" -- quickshell -p "$ENTRYPOINT"
