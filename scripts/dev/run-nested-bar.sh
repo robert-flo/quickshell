@@ -34,6 +34,13 @@ echo ""
 
 export QML_IMPORT_PATH="$REPO_DIR/build/qml"
 
+# Configuración modular de componentes de la barra
+BAR_CONFIG="$REPO_DIR/config/bar-config.json"
+if [[ -f "$BAR_CONFIG" ]]; then
+    export CLAVIS_PERSONALIZATION_CONFIG="$BAR_CONFIG"
+    echo "Configuración de barra: $BAR_CONFIG"
+fi
+
 # Configurar emulador de key-cli para alimentar métricas del sistema en la barra
 MOCK_KEY="$REPO_DIR/scripts/dev/mock-key-sysmon.py"
 if [[ -f "$MOCK_KEY" ]]; then

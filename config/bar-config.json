@@ -1,0 +1,28 @@
+{
+  "bar": {
+    "enabled": true,
+    "position": "top",
+    "showValues": true,
+    "showNames": false,
+    "barLeadingComponents": [
+      "workspaces",
+      "information",
+      "activeWindow"
+    ],
+    "barTrailingComponents": [
+      "tray",
+      "systemMonitor",
+      "quickSettings"
+    ],
+    "quickSettingsComponents": [
+      "network",
+      "bluetooth",
+      "brightness",
+      "volume",
+      "microphone",
+      "battery",
+      "settings",
+      "power"
+    ]
+  }
+}
