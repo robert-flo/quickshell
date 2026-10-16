@@ -127,6 +127,7 @@ Singleton {
             readonly property int fillMode: WallpaperService.qtFillMode(fillModeName)
             readonly property bool sourceIsColor: !WallpaperService.isImagePath(sourcePath)
             readonly property bool externalBackend: AwwwWallpaperService.effectiveBackend === "awww"
+                                                    || MpvpaperWallpaperService.active
             readonly property bool panoramaSelected: fillModeName === "panorama" && !externalBackend
             readonly property bool hasHorizontalDriver: PersonalizationConfig.parallaxFollowTiledColumns
                                                         || PersonalizationConfig.parallaxFollowSidebars
