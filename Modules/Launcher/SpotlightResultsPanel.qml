@@ -561,7 +561,13 @@ Item {
                             id: wallpaperImage
 
                             anchors.fill: parent
-                            source: wallpaperDelegate.entry.preview
+                            source: {
+                                const _ = MpvpaperWallpaperService.previewRevision;
+                                const cached = wallpaperDelegate.entry.preview;
+                                if (cached)
+                                    return cached;
+                                return WallpaperService.previewUrl(wallpaperDelegate.wallpaperPath);
+                            }
                             sourceSize.width: Math.ceil(previewFrame.width * 2)
                             sourceSize.height: Math.ceil(previewFrame.height * 2)
                             asynchronous: true
