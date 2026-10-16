@@ -21,13 +21,14 @@ Item {
 
     function resultForPath(path, needle) {
         const title = WallpaperService.basename(path);
+        const _ = MpvpaperWallpaperService.previewRevision;
         return {
             provider: "wallpapers",
             id: path,
             title: title,
             subtitle: WallpaperService.parentFolder(path),
             icon: "",
-            preview: Paths.fileUrl(path),
+            preview: WallpaperService.previewUrl(path),
             score: needle === "" ? 0 : (title.toLocaleLowerCase().startsWith(needle) ? 2 : 1),
             actions: ["apply"],
             path: path
@@ -93,6 +94,15 @@ Item {
 
         function onWallpapersChanged() {
             root.rebuild();
+        }
+    }
+
+    Connections {
+        target: MpvpaperWallpaperService
+
+        function onPreviewRevisionChanged() {
+            if (root.active)
+                root.rebuild();
         }
     }
 }

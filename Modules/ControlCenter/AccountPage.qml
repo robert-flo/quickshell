@@ -679,8 +679,10 @@ Item {
                                         id: wallpaperImage
 
                                         anchors.fill: parent
-                                        source: WallpaperService.isImagePath(wallpaperChoice.modelData)
-                                                ? Paths.fileUrl(wallpaperChoice.modelData) : ""
+                                        source: {
+                                            const _ = MpvpaperWallpaperService.previewRevision;
+                                            return WallpaperService.previewUrl(wallpaperChoice.modelData);
+                                        }
                                         sourceSize: Qt.size(Math.max(1, Math.ceil(width
                                                                                   * Screen.devicePixelRatio
                                                                                   * 2)), Math.max(1, Math.ceil(

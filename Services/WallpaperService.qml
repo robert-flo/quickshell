@@ -270,6 +270,26 @@ Singleton {
     function isVideoPath(value) {
         return WallpaperSource.isVideo(value);
     }
+    function previewUrl(value) {
+        const path = String(value || "").trim();
+        if (!path)
+            return "";
+        if (root.isImagePath(path))
+            return Paths.fileUrl(path);
+        if (root.isVideoPath(path))
+            return MpvpaperWallpaperService.previewUrl(path);
+        return "";
+    }
+    function ensureVideoPreviews(paths) {
+        const list = Array.isArray(paths) ? paths : root.wallpapers;
+        const videos = [];
+        for (let i = 0; i < list.length; i += 1) {
+            const path = String(list[i] || "").trim();
+            if (root.isVideoPath(path))
+                videos.push(path);
+        }
+        MpvpaperWallpaperService.ensurePreviews(videos);
+    }
 
     function setWallpaper(path, screenName) {
         if (!WallpaperSource.supported(path, PersonalizationConfig.desktopWallpaperBackend))
@@ -739,6 +759,7 @@ Singleton {
                     unique.push(sorted[i]);
             }
             root.wallpapers = unique;
+            root.ensureVideoPreviews(unique);
             if (root.scanRequested) {
                 root.scan();
                 return;
