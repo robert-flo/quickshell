@@ -83,9 +83,11 @@ Singleton {
         const screens = Quickshell.screens;
         if (!screens.length)
             return WallpaperSource.isImage(root.wallpaperForScreen(""));
-        for (let i = 0; i < screens.length; ++i)
-            if (!WallpaperSource.isImage(root.wallpaperForScreen(screens[i].name)))
+        for (let i = 0; i < screens.length; ++i) {
+            const source = root.wallpaperForScreen(screens[i].name);
+            if (!WallpaperSource.isImage(source) || WallpaperSource.isVideo(source))
                 return false;
+        }
         return true;
     }
 
@@ -250,22 +252,31 @@ Singleton {
         root.scanResults = [];
         scanProcess.command = ["find", PersonalizationConfig.wallpaperFolder, "-type", "f", "(", "-iname", "*.jpg",
                                "-o", "-iname", "*.jpeg", "-o", "-iname", "*.png", "-o", "-iname", "*.webp",
-                               "-o", "-iname", "*.bmp", "-o", "-iname", "*.gif", ")", "-print"];
+                               "-o", "-iname", "*.bmp", "-o", "-iname", "*.gif", "-o", "-iname", "*.mp4", "-o",
+                               "-iname", "*.webm", "-o", "-iname", "*.mkv", "-o", "-iname", "*.mov", ")",
+                               "-print"];
         scanProcess.running = false;
         scanProcess.running = true;
     }
 
     function rememberWallpaper(path) {
-        if (!root.isImagePath(path) || root.wallpapers.indexOf(path) !== -1)
+        if ((!root.isImagePath(path) && !root.isVideoPath(path)) || root.wallpapers.indexOf(path) !== -1)
             return;
 
         const next = root.wallpapers.concat([path]);
         root.wallpapers = next.slice().sort();
     }
 
+    function isVideoPath(value) {
+        return WallpaperSource.isVideo(value);
+    }
+
     function setWallpaper(path, screenName) {
         if (!WallpaperSource.supported(path, PersonalizationConfig.desktopWallpaperBackend))
             return false;
+
+        if (!root.isVideoPath(path))
+            MpvpaperWallpaperService.clear();
 
         if (PersonalizationConfig.perMonitorWallpaper && screenName)
             PersonalizationConfig.setMonitorWallpaper(screenName, path);
@@ -276,8 +287,16 @@ Singleton {
 
         root.currentWallpaper = path;
         root.rememberWallpaper(path);
-        Appearance.currentWallpaperPreview = root.isImagePath(path) ? Paths.fileUrl(path) : path;
         root.switching = true;
+
+        if (root.isVideoPath(path)) {
+            Appearance.currentWallpaperPreview = "";
+            if (!MpvpaperWallpaperService.apply(path))
+                root.switching = false;
+            return MpvpaperWallpaperService.busy || MpvpaperWallpaperService.active;
+        }
+
+        Appearance.currentWallpaperPreview = root.isImagePath(path) ? Paths.fileUrl(path) : path;
 
         if (root.isImagePath(path))
             ThemeService.generateFromWallpaper(path);
@@ -290,6 +309,7 @@ Singleton {
     }
 
     function clearWallpaper(screenName) {
+        MpvpaperWallpaperService.clear();
         if (PersonalizationConfig.perMonitorWallpaper && screenName)
             PersonalizationConfig.setMonitorWallpaper(screenName, "");
         else if (PersonalizationConfig.perModeWallpaper)
@@ -652,6 +672,21 @@ Singleton {
 
         function onGeneratingChanged() {
             if (!ThemeService.generating)
+                root.switching = false;
+        }
+    }
+
+    Connections {
+        target: MpvpaperWallpaperService
+
+        function onThumbPathChanged() {
+            if (MpvpaperWallpaperService.thumbPath && root.isVideoPath(root.currentWallpaper))
+                ThemeService.generateFromWallpaper(MpvpaperWallpaperService.thumbPath);
+        }
+
+        function onActiveChanged() {
+            if (!MpvpaperWallpaperService.active && !MpvpaperWallpaperService.busy && root.isVideoPath(
+                        root.currentWallpaper) && !ThemeService.generating)
                 root.switching = false;
         }
     }

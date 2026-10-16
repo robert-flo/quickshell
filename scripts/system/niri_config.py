@@ -254,7 +254,19 @@ def initial(feature, request):
                 kdl.Node('spawn', args=['qs', '-c', 'clavis', 'ipc', 'call', *command])]))
         return header + render(section)
     if feature == 'layer-rules':
-        return header + 'layer-rule {\n    match namespace="^clavis-overview-wallpaper$";\n    place-within-backdrop true;\n}\nlayout {\n    background-color "transparent";\n}\n'
+        return header + (
+            'layer-rule {\n'
+            '    match namespace="^clavis-overview-wallpaper$";\n'
+            '    place-within-backdrop true;\n'
+            '}\n'
+            'layer-rule {\n'
+            '    match namespace="^mpvpaper$";\n'
+            '    place-within-backdrop true;\n'
+            '}\n'
+            'layout {\n'
+            '    background-color "transparent";\n'
+            '}\n'
+        )
     if feature == 'effects':
         if request.get('xray', True):
             return header + "// X-Ray is niri's default for client-requested effects.\n"

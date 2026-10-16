@@ -43,9 +43,14 @@ function kind(source) {
     var path = localPath(source);
     if (path.indexOf("\u0000") >= 0 || path.indexOf("\n") >= 0 || path.startsWith("#")
             || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(path)) return "invalid";
-    return /\.(jpg|jpeg|png|webp|bmp|gif)$/i.test(path) ? "image" : "invalid";
+    if (/\.(jpg|jpeg|png|webp|bmp|gif)$/i.test(path))
+        return "image";
+    if (/\.(mp4|webm|mkv|mov)$/i.test(path))
+        return "video";
+    return "invalid";
 }
 function isImage(source) { return kind(source) === "image"; }
+function isVideo(source) { return kind(source) === "video"; }
 function isSolid(source) { return kind(source) === "solid"; }
 function primary(source) {
     var type = kind(source);
@@ -55,5 +60,7 @@ function primary(source) {
 }
 function supported(source, backend) {
     var type = kind(source);
-    return backend === "awww" ? type === "image" : ["image","solid","palette"].indexOf(type) >= 0;
+    if (backend === "awww")
+        return type === "image";
+    return ["image", "solid", "palette", "video"].indexOf(type) >= 0;
 }

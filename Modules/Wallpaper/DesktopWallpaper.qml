@@ -38,7 +38,7 @@ Variants {
 
             anchors.fill: parent
             clip: true
-            visible: AwwwWallpaperService.quickshellContentVisible
+            visible: AwwwWallpaperService.quickshellContentVisible && !MpvpaperWallpaperService.active
 
             readonly property string screenKey: String(modelData.name)
             // sceneFor() creates and registers a scene.  Keep creation
@@ -96,7 +96,8 @@ Variants {
                 transitionDurationMs: PersonalizationConfig.transitionDurationMs
                 transitionEasingMode: PersonalizationConfig.transitionEasingMode
                 transitionBezierCurve: PersonalizationConfig.transitionBezierCurve
-                transitionsEnabled: AwwwWallpaperService.quickshellContentVisible
+                transitionsEnabled: AwwwWallpaperService.quickshellContentVisible &&
+                                    !MpvpaperWallpaperService.active
                 textureWidth: Math.min(Math.max(1, Math.round(root.width)), 8192)
                 textureHeight: Math.min(Math.max(1, Math.round(root.height)), 8192)
 
