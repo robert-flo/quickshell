@@ -44,10 +44,13 @@ TestCase {
     }
     function test_legacySources() {
         compare(Source.kind("/wallpapers/a.png"), "image");
+        compare(Source.kind("/wallpapers/live.mp4"), "video");
         compare(Source.localPath("file:///wallpapers/a%20b.png"), "/wallpapers/a b.png");
         compare(Source.kind("#80abcdef"), "solid");
         compare(Source.primary("#80abcdef"), "#abcdef");
         verify(!Source.supported("#abcdef", "awww"));
+        verify(Source.supported("/wallpapers/live.webm", "quickshell"));
+        verify(!Source.supported("/wallpapers/live.webm", "awww"));
     }
     function test_harmoniesAndBoundary() {
         compare(Zen.algorithms(1).join(","), "floating");
