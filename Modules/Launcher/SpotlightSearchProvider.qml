@@ -76,8 +76,8 @@ Item {
                                                           title: WallpaperService.basename(path),
                                                           subtitle: WallpaperService.parentFolder(path),
                                                           iconKind: "wallpaper",
-                                                          previewUrl: Paths.fileUrl(path),
-                                                          symbol: "image"
+                                                          previewUrl: WallpaperService.previewUrl(path),
+                                                          symbol: WallpaperService.isVideoPath(path) ? "movie" : "image"
                                                       }));
         results = LocalSearch.groupedResults({
                                                  apps: apps,
