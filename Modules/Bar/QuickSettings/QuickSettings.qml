@@ -42,11 +42,13 @@ TopBarPill {
         anchors.centerIn: parent
         rowSpacing: Sizes.barItemSpacing
         columnSpacing: Sizes.barItemSpacing
-        columns: root.vertical ? 1 : 8
+        columns: root.vertical ? 1 : componentRepeater.count
 
         Repeater {
             id: componentRepeater
-            model: Services.PersonalizationConfig.quickSettingsComponents
+            model: Services.PersonalizationConfig.quickSettingsComponents.filter(
+                id => id !== "battery" || Services.PowerService.hasPhysicalBattery
+            )
 
             Loader {
                 id: componentLoader
