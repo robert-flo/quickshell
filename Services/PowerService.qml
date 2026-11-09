@@ -9,6 +9,19 @@ Singleton {
     readonly property UPowerDevice device: UPower.displayDevice
     readonly property bool ready: device !== null && device.ready
     readonly property bool present: ready && device.isPresent
+    readonly property bool hasPhysicalBattery: {
+        if (!ready || !present)
+            return false;
+        if (device && (device.isLaptopBattery || (device.powerSupply && device.type === UPowerDeviceType.Battery)))
+            return true;
+        const devices = UPower.devices.values;
+        for (let i = 0; i < devices.length; i += 1) {
+            const candidate = devices[i];
+            if (candidate && candidate.ready && candidate.isPresent && (candidate.isLaptopBattery || (candidate.powerSupply && candidate.type === UPowerDeviceType.Battery)))
+                return true;
+        }
+        return false;
+    }
     readonly property bool onBattery: UPower.onBattery
     readonly property real percentage: present ? device.percentage : NaN
     readonly property int state: ready ? device.state : UPowerDeviceState.Unknown

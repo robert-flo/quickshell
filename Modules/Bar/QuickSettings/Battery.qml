@@ -10,6 +10,7 @@ import "../../../Common/functions/SystemFormat.js" as Format
 Item {
     id: root
 
+    visible: PowerService.hasPhysicalBattery
     property bool vertical: false
     readonly property bool valueAvailable: PowerService.present && Format.isNumber(PowerService.percentage)
     readonly property real percentage: root.valueAvailable ? Math.max(0, Math.min(100,
@@ -81,10 +82,10 @@ Item {
                                                                                      "Unknown"))].join("\n");
     }
 
-    implicitWidth: root.vertical ? Math.max(28, batteryContent.implicitWidth) : batteryContent.implicitWidth
-                                   + 8
-    implicitHeight: root.vertical ? Math.max(Sizes.barControlCircleSize, batteryContent.implicitHeight) :
-                                    Sizes.barControlCircleSize
+    implicitWidth: root.visible ? (root.vertical ? Math.max(28, batteryContent.implicitWidth) : batteryContent.implicitWidth
+                                   + 8) : 0
+    implicitHeight: root.visible ? (root.vertical ? Math.max(Sizes.barControlCircleSize, batteryContent.implicitHeight) :
+                                    Sizes.barControlCircleSize) : 0
     Accessible.name: root.tooltipText
     Accessible.role: Accessible.StaticText
 

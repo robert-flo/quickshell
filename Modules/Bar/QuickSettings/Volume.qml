@@ -35,8 +35,9 @@ Item {
                     Layout.preferredHeight: Sizes.barControlCircleSize
                     Layout.alignment: Qt.AlignCenter
 
-                    value: Volume.sinkVolume
+                    value: Math.min(1.0, Volume.sinkVolume)
                     progressColor: (Volume.sinkMuted || Volume.sinkVolume <= 0) ? BarColors.error :
+                                                                                  (Volume.sinkVolume > 1.0) ? Appearance.colors.colTertiary :
                                                                                   BarColors.selected
 
                     trackColor: BarColors.track
@@ -67,17 +68,15 @@ Item {
             }
         }
         Accessible.name: tooltip.text
-
-        WheelHandler {
-            onWheel: wheel => {
-                const step = 0.05;
-                let newVol = Volume.sinkVolume;
-                if (wheel.angleDelta.y > 0)
-                    newVol += step;
-                else
-                    newVol -= step;
-                Volume.setSinkVolume(newVol);
-            }
+        wheelAction: wheel => {
+            const step = 0.05;
+            let newVol = Volume.sinkVolume;
+            if (wheel.angleDelta.y > 0)
+                newVol = Math.min(1.5, newVol + step);
+            else
+                newVol = Math.max(0, newVol - step);
+            Volume.setSinkVolume(newVol);
+            wheel.accepted = true;
         }
         onClicked: {
             if (root.screen && root.screen.name)

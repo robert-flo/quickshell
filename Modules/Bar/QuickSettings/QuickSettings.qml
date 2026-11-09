@@ -52,6 +52,7 @@ TopBarPill {
                 id: componentLoader
 
                 required property string modelData
+                visible: status === Loader.Ready && item && item.visible
 
                 sourceComponent: root.componentFor(componentLoader.modelData)
             }
