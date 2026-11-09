@@ -125,6 +125,7 @@ Item {
 
             Layout.fillWidth: true
             enabled: root.available
+            to: 1.5
             materialSymbol: root.muted ? root.mutedIconName : root.iconName
             percentText: root.muted ? qsTr("Mute") : Math.round(value * 100) + "%"
             tooltipContent: Math.round(value * 100) + "%"
@@ -133,7 +134,7 @@ Item {
             Binding {
                 target: volumeControl
                 property: "value"
-                value: Math.max(0, Math.min(1, root.volume))
+                value: Math.max(0, Math.min(1.5, root.volume))
                 when: !volumeControl.pressed
             }
 
