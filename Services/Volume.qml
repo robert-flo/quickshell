@@ -166,7 +166,7 @@ Singleton {
     }
 
     function nodeVolume(node) {
-        return node && node.audio ? Math.max(0, Math.min(1, node.audio.volume)) : 0;
+        return node && node.audio ? Math.max(0, Math.min(1.5, node.audio.volume)) : 0;
     }
 
     function nodeMuted(node) {
@@ -214,7 +214,7 @@ Singleton {
         if (!node || !node.audio)
             return root.fail("set-volume", qsTr("The audio object is no longer available"));
 
-        const safeVolume = Math.max(0, Math.min(1, Number(volume)));
+        const safeVolume = Math.max(0, Math.min(1.5, Number(volume)));
         if (isNaN(safeVolume))
             return root.fail("set-volume", qsTr("Invalid volume value"));
 

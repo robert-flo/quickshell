@@ -57,18 +57,15 @@ Item {
             }
         }
         Accessible.name: tooltip.text
-
-        WheelHandler {
-            onWheel: wheel => {
-                const step = 0.05;
-                let newBri = root.brightnessValue;
-                if (wheel.angleDelta.y > 0)
-                    newBri += step;
-                else
-                    newBri -= step;
-                Brightness.setBrightnessForScreen(root.screen, newBri);
-                wheel.accepted = true;
-            }
+        wheelAction: wheel => {
+            const step = 0.05;
+            let newBri = root.brightnessValue;
+            if (wheel.angleDelta.y > 0)
+                newBri = Math.min(1.0, newBri + step);
+            else
+                newBri = Math.max(0.01, newBri - step);
+            Brightness.setBrightnessForScreen(root.screen, newBri);
+            wheel.accepted = true;
         }
     }
 
