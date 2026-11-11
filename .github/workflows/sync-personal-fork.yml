@@ -27,10 +27,21 @@ permissions:
   issues: write
 
 jobs:
-  sync:
+  sync-personal:
     uses: robert-flo/fleet/.github/workflows/sync-personal-fork.yml@main
     with:
       upstream_repo: StatIndet/quickshell
       upstream_branch: main
+      personal_branch: personal
+    secrets:
+      token: ${{ secrets.FORK_SYNC_PAT }}
+
+  sync-personal-classic:
+    needs: sync-personal
+    uses: robert-flo/fleet/.github/workflows/sync-personal-fork.yml@main
+    with:
+      upstream_repo: StatIndet/quickshell
+      upstream_branch: main
+      personal_branch: personal-classic
     secrets:
       token: ${{ secrets.FORK_SYNC_PAT }}
