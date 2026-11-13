@@ -6,16 +6,10 @@ ActionButton {
 
     property bool vertical: false
     property bool expandedContent: true
-    property real contentPadding: Sizes.barLabelSpacing
-
-    contentColor: BarColors.foreground
-    rippleColor: BarColors.foreground
-    stateLayerColor: BarColors.foreground
-    hoverStateLayerColor: BarColors.foreground
-    pressedStateLayerColor: BarColors.foreground
+    property real contentPadding: Metrics.spacingM - Metrics.spacingXXS
 
     // Compact icon controls keep a 28px slot. Text and grouped content use
-    // 6px of padding along the bar's main axis.
+    // 10px of padding along the bar's main axis.
     leftPadding: !vertical && expandedContent ? root.contentPadding : 0
     rightPadding: leftPadding
     topPadding: vertical && expandedContent ? root.contentPadding : 0

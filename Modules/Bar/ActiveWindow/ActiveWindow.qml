@@ -77,14 +77,14 @@ TopBarPill {
                 anchors.fill: parent
                 text: "desktop_windows"
                 iconSize: Sizes.barIconSize
-                color: BarColors.selected
+                color: Appearance.colors.colPrimary
                 visible: root.isDesktop
             }
 
             Text {
                 anchors.centerIn: parent
                 text: root.activeAppName.charAt(0).toUpperCase()
-                color: BarColors.selected
+                color: Appearance.colors.colPrimary
                 font.pixelSize: 13
                 font.bold: true
                 visible: !root.isDesktop && !appIcon.visible
@@ -108,7 +108,7 @@ TopBarPill {
                 text: root.activeTitle
                 font.family: Fonts.ui
                 font.pointSize: 11
-                color: BarColors.foreground
+                color: Appearance.colors.colOnSurface
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
@@ -122,7 +122,7 @@ TopBarPill {
                 text: root.stackedVerticalTitle(root.verticalAppName)
                 font.family: Fonts.ui
                 font.pointSize: 11
-                color: BarColors.foreground
+                color: Appearance.colors.colOnSurface
                 horizontalAlignment: Text.AlignHCenter
                 lineHeight: 0.9
                 visible: root.vertical && root.verticalAppNameIsCjk
@@ -135,7 +135,7 @@ TopBarPill {
                 text: root.limitedVerticalTitle(root.verticalAppName)
                 font.family: Fonts.ui
                 font.pointSize: 11
-                color: BarColors.foreground
+                color: Appearance.colors.colOnSurface
                 rotation: root.edge === "left" ? -90 : 90
                 visible: root.vertical && !root.verticalAppNameIsCjk
             }

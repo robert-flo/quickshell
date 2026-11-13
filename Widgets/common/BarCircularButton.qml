@@ -13,9 +13,9 @@ Item {
     property real baseSize: Sizes.barControlCircleSize
     property real iconSize: 20
     property real iconFill: 0
-    property color containerColor: "transparent"
-    property color rippleColor: BarColors.foreground
-    property color iconColor: BarColors.foreground
+    property color containerColor: Appearance.colors.colPrimaryContainer
+    property color rippleColor: Appearance.colors.colOnPrimaryContainer
+    property color iconColor: Appearance.colors.colOnPrimaryContainer
     property var downAction
     property var doubleClickAction
     property var altAction
@@ -46,7 +46,6 @@ Item {
         iconName: root.iconName
         iconSize: root.iconSize
         iconFill: root.iconFill
-        selectedIconColor: BarColors.selected
         iconColor: root.iconColor
         selected: root.selected
         showTooltip: false

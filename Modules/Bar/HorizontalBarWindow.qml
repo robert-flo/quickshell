@@ -14,7 +14,8 @@ PanelWindow {
     readonly property real lengthPadding: Math.min(PersonalizationConfig.barLengthPadding, Math.max(0, (width
                                                                                                         - content.minimumLength)
                                                                                                     / 2))
-    readonly property real surfaceThickness: outerEdgeMargin + visualThickness
+    // Shadow pixels need surface space, but must not reserve desktop space.
+    readonly property real surfaceThickness: outerEdgeMargin + visualThickness + Sizes.barShadowBuffer
     readonly property real exclusiveThickness: Math.max(0, outerEdgeMargin + visualThickness
                                                         + PersonalizationConfig.barExclusiveZoneOffset)
 
@@ -44,7 +45,7 @@ PanelWindow {
         id: visualBand
 
         x: root.lengthPadding
-        y: axis.isTop ? root.outerEdgeMargin : 0
+        y: axis.isTop ? root.outerEdgeMargin : Sizes.barShadowBuffer
         width: Math.max(0, parent.width - 2 * root.lengthPadding)
         height: root.visualThickness
 
@@ -55,6 +56,13 @@ PanelWindow {
             screen: root.screen
             axis: axis
         }
+    }
+
+    CompositorBlurRegion {
+        targetWindow: root
+        backgroundItem: content.backgroundItems.length > 0 ? content.backgroundItems[0] : null
+        additionalBackgroundItems: content.backgroundItems.slice(1)
+        radius: PersonalizationConfig.barModuleRadius
     }
 
     mask: Region {

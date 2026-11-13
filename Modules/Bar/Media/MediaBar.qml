@@ -49,7 +49,7 @@ TopBarPill {
             iconName: root.player && root.player.isPlaying ? "pause" : "play_arrow"
             accessibleName: root.player && root.player.isPlaying ? qsTr("Pause") : qsTr("Play")
             enabled: root.player !== null && root.player.canTogglePlaying
-            iconColor: BarColors.selected
+            iconColor: Appearance.colors.colPrimary
             onClicked: root.player.togglePlaying()
         }
 
@@ -103,7 +103,7 @@ TopBarPill {
                         textFormat: Text.PlainText
                         font.family: Fonts.ui
                         font.pointSize: 11
-                        color: BarColors.foreground
+                        color: Appearance.colors.colOnSurface
                         onTextChanged: Qt.callLater(titleViewport.restartScroll)
                         onImplicitWidthChanged: Qt.callLater(titleViewport.restartScroll)
                     }
@@ -162,8 +162,6 @@ TopBarPill {
 
     component MediaButton: IconButton {
         Layout.alignment: Qt.AlignCenter
-        iconColor: BarColors.foreground
-        selectedIconColor: BarColors.selected
         controlSize: Sizes.barControlCircleSize
         iconSize: Sizes.barIconSize
         opacity: enabled ? 1 : 0.35

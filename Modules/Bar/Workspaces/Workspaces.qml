@@ -79,10 +79,10 @@ TopBarPill {
                     height: parent.implicitHeight
                     radius: height / 2
 
-                    color: delegateRoot.active || delegateRoot.isHovered ? BarColors.selected :
-                                                                           delegateRoot.hasWindows
-                                                                           ? BarColors.inactiveWorkspace :
-                                                                             BarColors.emptyWorkspace
+                    color: delegateRoot.active ? Appearance.colors.colPrimary : delegateRoot.hasWindows
+                                                 ? Appearance.colors.colOnSurface : delegateRoot.isHovered
+                                                   ? Appearance.colors.colLayer2Hover :
+                                                     Appearance.colors.colLayer4
 
                     Behavior on color {
                         ColorAnimation {

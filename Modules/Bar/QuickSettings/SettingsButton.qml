@@ -13,8 +13,8 @@ BarCircularButton {
     iconName: "settings"
     selected: root.active
     containerColor: "transparent"
-    rippleColor: BarColors.foreground
-    iconColor: BarColors.foreground
+    rippleColor: Appearance.colors.colOnSurface
+    iconColor: Appearance.colors.colOnSurface
     tooltipText: qsTr("Left click: Quick Settings\nRight click: Control Center")
     onClicked: {
         if (root.screen && root.screen.name)

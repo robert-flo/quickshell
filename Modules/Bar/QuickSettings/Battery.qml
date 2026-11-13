@@ -21,7 +21,8 @@ Item {
 
     readonly property string displayText: root.valueAvailable ? String(Math.round(root.percentage)) : "—"
     readonly property bool showValue: PersonalizationConfig.barShowValues
-    readonly property color foregroundColor: root.lowBattery ? BarColors.error : BarColors.foreground
+    readonly property color foregroundColor: root.lowBattery ? Appearance.colors.colError :
+                                                               Appearance.colors.colOnSurface
 
     readonly property string tooltipText: root.buildTooltip()
 
