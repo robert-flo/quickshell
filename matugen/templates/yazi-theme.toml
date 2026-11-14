@@ -158,25 +158,25 @@ footer = { fg = "{{colors.on_secondary.default.hex}}", bg = "{{colors.secondary.
 [filetype]
 
 rules = [
-    # Images (Violeta joya de alto contraste)
-    { mime = "image/*", fg = "#7c3aed" },
+    # Images
+    { mime = "image/*", fg = "{{colors.tertiary.default.hex}}" },
 
-    # Media (Teal oceano de alto contraste)
-    { mime = "{audio,video}/*", fg = "#0e7490" },
+    # Media
+    { mime = "{audio,video}/*", fg = "{{colors.primary.default.hex}}" },
 
-    # Archives (Ambar tostado)
-    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#b45309" },
+    # Archives
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "{{colors.secondary.default.hex}}" },
 
-    # Documents (Azul zafiro)
-    { mime = "application/{pdf,doc,rtf}", fg = "#0969da" },
+    # Documents
+    { mime = "application/{pdf,doc,rtf}", fg = "{{colors.outline.default.hex}}" },
 
     # Special files
-    { url = "*", is = "orphan", bg = "#ffd8d6", fg = "#b91c1c" },
-    { url = "*", is = "exec", fg = "#d20f39", bold = true },
+    { url = "*", is = "orphan", bg = "{{colors.error_container.default.hex}}", fg = "{{colors.error.default.hex}}" },
+    { url = "*", is = "exec", fg = "{{colors.error.default.hex}}", bold = true },
 
     # Fallback
-    { url = "*", fg = "#3a3d52" },
-    { url = "*/", fg = "#1e66f5", bold = true },
+    { url = "*", fg = "{{colors.on_surface.default.hex}}" },
+    { url = "*/", fg = "{{colors.primary.default.hex}}", bold = true },
 ]
 
 # : ]]]
