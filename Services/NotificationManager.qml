@@ -12,10 +12,10 @@ import qs.Services
 Singleton {
     id: root
 
-    // On-screen toasts leave after two seconds. The bus timeout is milliseconds
+    // On-screen toasts leave after seven seconds. The bus timeout is milliseconds
     // (0 stays, -1 asks the server); it is not used for the popup. The entry
     // remains in the notification list.
-    readonly property int defaultPopupTimeoutMs: 2000
+    readonly property int defaultPopupTimeoutMs: 7000
     readonly property string notificationsDir: Paths.stateHome + "/notifications"
     readonly property string filePath: notificationsDir + "/notifications.json"
     readonly property bool silent: UiPreferences.dndEnabled
