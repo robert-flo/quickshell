@@ -89,6 +89,12 @@ Item {
                             image: delegateRoot.modelData ? delegateRoot.modelData.image : ""
                             summary: delegateRoot.modelData ? delegateRoot.modelData.summary : ""
                             urgency: delegateRoot.modelData ? delegateRoot.modelData.urgency : ""
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.manager.invokeDefaultAction(delegateRoot.modelData.notificationId)
+                            }
                         }
 
                         ColumnLayout {
@@ -104,9 +110,17 @@ Item {
                         font.pixelSize: 14
                         Layout.fillWidth: true
                         elide: Text.ElideRight
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.manager.invokeDefaultAction(delegateRoot.modelData.notificationId)
+                        }
                     }
 
                     Text {
+                        id: bodyText
+
                         text: delegateRoot.sanitizedBody()
                         textFormat: Text.StyledText
                         color: Appearance.colors.colOnSurfaceVariant
@@ -115,8 +129,17 @@ Item {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
                         maximumLineCount: delegateRoot.normalActions.length > 0 ? 1 : 2
-                        onLinkActivated: link => {
-                            return ApplicationService.openUrl(link);
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: mouse => {
+                                const link = bodyText.linkAt(mouse.x, mouse.y);
+                                if (link)
+                                    ApplicationService.openUrl(link);
+                                else
+                                    root.manager.invokeDefaultAction(delegateRoot.modelData.notificationId);
+                            }
                         }
                     }
 

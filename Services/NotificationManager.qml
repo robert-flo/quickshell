@@ -553,14 +553,21 @@ Singleton {
         return String(value || "").replace(/\.desktop$/i, "");
     }
 
-    function focusDesktopEntry(desktopEntry) {
+    function focusDesktopEntry(desktopEntry, summary) {
         const id = root.desktopId(desktopEntry);
         if (!id || !Niri.connected)
             return false;
         const needle = id.toLowerCase();
-        const match = Niri.searchWindows("").find(window => {
+        const matches = Niri.searchWindows("").filter(window => {
             return root.desktopId(window && window.appId).toLowerCase() === needle;
         });
+        if (matches.length === 0)
+            return false;
+        const hint = String(summary || "").toLowerCase().split(/\s+/)[0] || "";
+        const titled = hint.length >= 2 ? matches.find(window => {
+            return String(window.title || "").toLowerCase().indexOf(hint) >= 0;
+        }) : null;
+        const match = titled || matches[0];
         if (!match || !match.id)
             return false;
         return match.isMinimized ? Niri.restoreWindow(match.id, "") : Niri.focusWindow(match.id);
@@ -577,7 +584,7 @@ Singleton {
         const notifObject = root.notificationById(id);
         if (!notifObject)
             return false;
-        const raised = root.focusDesktopEntry(notifObject.desktopEntry);
+        const raised = root.focusDesktopEntry(notifObject.desktopEntry, notifObject.summary);
         const action = root.defaultAction(notifObject);
         if (action) {
             action.invoke();
@@ -589,7 +596,7 @@ Singleton {
     function invokeAction(action, notificationId) {
         const notifObject = root.notificationById(notificationId);
         if (notifObject)
-            root.focusDesktopEntry(notifObject.desktopEntry);
+            root.focusDesktopEntry(notifObject.desktopEntry, notifObject.summary);
         if (action)
             action.invoke();
     }
