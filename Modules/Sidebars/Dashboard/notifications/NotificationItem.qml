@@ -281,7 +281,10 @@ Item {
                                     Layout.fillWidth: true
                                     buttonText: modelData.text
                                     urgency: root.notificationUrgency
-                                    onClicked: NotificationManager.invokeAction(modelData)
+                                    onClicked: NotificationManager.invokeAction(modelData,
+                                                                             root.notificationObject
+                                                                             ? root.notificationObject.notificationId
+                                                                             : -1)
                                 }
                             }
 
