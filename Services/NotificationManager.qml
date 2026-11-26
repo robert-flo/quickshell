@@ -5,12 +5,17 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
+import Clavis.Niri
 import qs.Common
+import qs.Services
 
 Singleton {
     id: root
 
-    readonly property int defaultPopupTimeoutMs: 7000
+    // On-screen toasts leave after two seconds. The bus timeout is milliseconds
+    // (0 stays, -1 asks the server); it is not used for the popup. The entry
+    // remains in the notification list.
+    readonly property int defaultPopupTimeoutMs: 2000
     readonly property string notificationsDir: Paths.stateHome + "/notifications"
     readonly property string filePath: notificationsDir + "/notifications.json"
     readonly property bool silent: UiPreferences.dndEnabled
@@ -310,12 +315,8 @@ Singleton {
         return root.list.find(notif => notif.notificationId === id) || null;
     }
 
-    function popupTimeoutMs(expireTimeoutSeconds) {
-        if (expireTimeoutSeconds === 0)
-            return 0;
-        if (expireTimeoutSeconds < 0)
-            return root.defaultPopupTimeoutMs;
-        return Math.max(1, Math.round(expireTimeoutSeconds * 1000));
+    function popupTimeoutMs(expireTimeout) {
+        return root.defaultPopupTimeoutMs;
     }
 
     function nativeActions(notifObject) {
@@ -548,13 +549,47 @@ Singleton {
         root.triggerListChange();
     }
 
-    function invokeDefaultAction(id) {
-        const action = root.defaultAction(root.notificationById(id));
-        if (action)
-            action.invoke();
+    function desktopId(value) {
+        return String(value || "").replace(/\.desktop$/i, "");
     }
 
-    function invokeAction(action) {
+    function focusDesktopEntry(desktopEntry) {
+        const id = root.desktopId(desktopEntry);
+        if (!id || !Niri.connected)
+            return false;
+        const needle = id.toLowerCase();
+        const match = Niri.searchWindows("").find(window => {
+            return root.desktopId(window && window.appId).toLowerCase() === needle;
+        });
+        if (!match || !match.id)
+            return false;
+        return match.isMinimized ? Niri.restoreWindow(match.id, "") : Niri.focusWindow(match.id);
+    }
+
+    function launchDesktopEntry(desktopEntry) {
+        const id = root.desktopId(desktopEntry);
+        if (!id)
+            return false;
+        return SpotlightAppUsage.launch(id) || SpotlightAppUsage.launch(id + ".desktop");
+    }
+
+    function invokeDefaultAction(id) {
+        const notifObject = root.notificationById(id);
+        if (!notifObject)
+            return false;
+        const raised = root.focusDesktopEntry(notifObject.desktopEntry);
+        const action = root.defaultAction(notifObject);
+        if (action) {
+            action.invoke();
+            return true;
+        }
+        return raised || root.launchDesktopEntry(notifObject.desktopEntry);
+    }
+
+    function invokeAction(action, notificationId) {
+        const notifObject = root.notificationById(notificationId);
+        if (notifObject)
+            root.focusDesktopEntry(notifObject.desktopEntry);
         if (action)
             action.invoke();
     }

@@ -25,8 +25,6 @@ Item {
 
             required property var modelData
             readonly property var normalActions: root.manager.normalActions(delegateRoot.modelData)
-            readonly property bool hasDefaultAction: root.manager.defaultAction(delegateRoot.modelData)
-                                                     !== null
             readonly property bool hasExpiry: delegateRoot.modelData && delegateRoot.modelData.popupExpiresAt
                                               > 0
             property real expiryProgress: 0
@@ -63,13 +61,6 @@ Item {
                 easing.type: Easing.Linear
             }
 
-            MouseArea {
-                anchors.fill: card
-                enabled: delegateRoot.hasDefaultAction
-                cursorShape: Qt.PointingHandCursor
-                onClicked: root.manager.invokeDefaultAction(delegateRoot.modelData.notificationId)
-            }
-
             RowLayout {
                 id: card
 
@@ -80,17 +71,27 @@ Item {
                 anchors.bottomMargin: 4
                 spacing: 12
 
-                NotificationVisual {
-                    Layout.preferredWidth: 44
-                    Layout.preferredHeight: 44
-                    Layout.alignment: Qt.AlignTop
-                    appIcon: delegateRoot.modelData ? delegateRoot.modelData.appIcon : ""
-                    image: delegateRoot.modelData ? delegateRoot.modelData.image : ""
-                    summary: delegateRoot.modelData ? delegateRoot.modelData.summary : ""
-                    urgency: delegateRoot.modelData ? delegateRoot.modelData.urgency : ""
-                }
+                MouseArea {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.manager.invokeDefaultAction(delegateRoot.modelData.notificationId)
 
-                ColumnLayout {
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 12
+
+                        NotificationVisual {
+                            Layout.preferredWidth: 44
+                            Layout.preferredHeight: 44
+                            Layout.alignment: Qt.AlignTop
+                            appIcon: delegateRoot.modelData ? delegateRoot.modelData.appIcon : ""
+                            image: delegateRoot.modelData ? delegateRoot.modelData.image : ""
+                            summary: delegateRoot.modelData ? delegateRoot.modelData.summary : ""
+                            urgency: delegateRoot.modelData ? delegateRoot.modelData.urgency : ""
+                        }
+
+                        ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 2
@@ -153,7 +154,8 @@ Item {
                                     pressedStateLayerOpacity: 0.12
                                     rippleColor: Appearance.colors.colOnSurfaceVariant
                                     Accessible.name: actionButton.modelData.text
-                                    onClicked: root.manager.invokeAction(actionButton.modelData)
+                                    onClicked: root.manager.invokeAction(actionButton.modelData,
+                                                                         delegateRoot.modelData.notificationId)
 
                                     contentItem: Text {
                                         id: actionLabel
@@ -172,27 +174,29 @@ Item {
                     }
                 }
 
-                RippleButton {
-                    Layout.preferredWidth: 40
-                    Layout.preferredHeight: 40
-                    Layout.alignment: Qt.AlignTop
-                    buttonRadius: Appearance.rounding.full
-                    containerColor: "transparent"
-                    stateLayerColor: Appearance.colors.colOnSurfaceVariant
-                    hoverStateLayerOpacity: 0.08
-                    focusStateLayerOpacity: 0.1
-                    pressedStateLayerOpacity: 0.12
-                    rippleColor: Appearance.colors.colOnSurfaceVariant
-                    Accessible.name: qsTr("Close")
-                    onClicked: root.manager.dismissPopup(delegateRoot.modelData.notificationId)
+                        RippleButton {
+                            Layout.preferredWidth: 40
+                            Layout.preferredHeight: 40
+                            Layout.alignment: Qt.AlignTop
+                            buttonRadius: Appearance.rounding.full
+                            containerColor: "transparent"
+                            stateLayerColor: Appearance.colors.colOnSurfaceVariant
+                            hoverStateLayerOpacity: 0.08
+                            focusStateLayerOpacity: 0.1
+                            pressedStateLayerOpacity: 0.12
+                            rippleColor: Appearance.colors.colOnSurfaceVariant
+                            Accessible.name: qsTr("Close")
+                            onClicked: root.manager.dismissPopup(delegateRoot.modelData.notificationId)
 
-                    contentItem: Text {
-                        text: "close"
-                        color: Appearance.colors.colOnSurfaceVariant
-                        font.family: Fonts.materialSymbolsRounded
-                        font.pixelSize: 20
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                            contentItem: Text {
+                                text: "close"
+                                color: Appearance.colors.colOnSurfaceVariant
+                                font.family: Fonts.materialSymbolsRounded
+                                font.pixelSize: 20
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
                     }
                 }
             }
